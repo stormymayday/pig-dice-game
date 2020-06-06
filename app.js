@@ -41,18 +41,52 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
         roundScore += dice;
         document.getElementById('current-' + activePlayer).textContent = roundScore;
     } else {
-        // Setting roundScore to zero and displaying it
-        roundScore = 0;
-        document.getElementById('current-' + activePlayer).textContent = roundScore;
+        alert('You have rolled 1! Next player\'s turn!');
+        // Passing turn the next player
+        nextPlayer();
+    }
+});
 
-        // Changing the active player
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+// Hold button Event Listener
+document.querySelector('.btn-hold').addEventListener('click', function () {
+    // Adding player's currentScore to the scores array and displaying it
+    scores[activePlayer] += roundScore;
+    document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
-        // Adding / Removing / Toggling active class
-        document.querySelector('.player-0-panel').classList.toggle('active');
-        document.querySelector('.player-1-panel').classList.toggle('active');
+    // Checking if the player has won the game
+    if (scores[activePlayer] >= 100) {
+
+        document.getElementById('name-' + activePlayer).textContent = 'Winner!';
 
         // hiding the dice image
         document.querySelector('.dice').style.display = 'none';
+
+        // Adding the winner CSS class to the player panel
+        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+
+        // Removing the active CSS class from the player panel
+        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+
+        alert('Player ' + (activePlayer + 1) + ' has won the game!');
+    } else {
+        // Passing turn the next player
+        nextPlayer();
     }
+
 });
+
+function nextPlayer() {
+    // Setting roundScore to zero and displaying it
+    roundScore = 0;
+    document.getElementById('current-' + activePlayer).textContent = roundScore;
+
+    // Changing the active player
+    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+
+    // Adding / Removing / Toggling active class
+    document.querySelector('.player-0-panel').classList.toggle('active');
+    document.querySelector('.player-1-panel').classList.toggle('active');
+
+    // hiding the dice image
+    document.querySelector('.dice').style.display = 'none';
+}
