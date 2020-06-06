@@ -25,6 +25,7 @@ document.getElementById('score-1').textContent = 0;
 document.getElementById('current-0').textContent = 0;
 document.getElementById('current-1').textContent = 0;
 
+// Roll Dice button Event Listener
 document.querySelector('.btn-roll').addEventListener('click', function () {
 
     // Generating a random number between 1 and 6
@@ -35,8 +36,23 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
     diceDOM.style.display = 'block';
     diceDOM.src = 'dice-' + dice + '.png';
 
-    document.getElementById('current-' + activePlayer).textContent = dice;
+    if (dice > 1) {
+        // Updating the roundScore if dice roll is greater than 1
+        roundScore += dice;
+        document.getElementById('current-' + activePlayer).textContent = roundScore;
+    } else {
+        // Setting roundScore to zero and displaying it
+        roundScore = 0;
+        document.getElementById('current-' + activePlayer).textContent = roundScore;
 
-    // 
+        // Changing the active player
+        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
 
+        // Adding / Removing / Toggling active class
+        document.querySelector('.player-0-panel').classList.toggle('active');
+        document.querySelector('.player-1-panel').classList.toggle('active');
+
+        // hiding the dice image
+        document.querySelector('.dice').style.display = 'none';
+    }
 });
