@@ -10,7 +10,7 @@ GAME RULES:
 */
 
 // Game Variables
-var scores, roundScore, activePlayer;
+var scores, roundScore, activePlayer, gameIsActive;
 
 // Initializing new game
 gameInit();
@@ -18,51 +18,62 @@ gameInit();
 // Roll Dice button Event Listener
 document.querySelector('.btn-roll').addEventListener('click', function () {
 
-    // Generating a random number between 1 and 6
-    var dice = Math.floor(Math.random() * 6 + 1);
+    if (gameIsActive) {
+        // Generating a random number between 1 and 6
+        var dice = Math.floor(Math.random() * 6 + 1);
 
-    // Displaying the corresponding dice image
-    var diceDOM = document.querySelector('.dice');
-    diceDOM.style.display = 'block';
-    diceDOM.src = 'dice-' + dice + '.png';
+        // Displaying the corresponding dice image
+        var diceDOM = document.querySelector('.dice');
+        diceDOM.style.display = 'block';
+        diceDOM.src = 'dice-' + dice + '.png';
 
-    if (dice > 1) {
-        // Updating the roundScore if dice roll is greater than 1
-        roundScore += dice;
-        document.getElementById('current-' + activePlayer).textContent = roundScore;
+        if (dice > 1) {
+            // Updating the roundScore if dice roll is greater than 1
+            roundScore += dice;
+            document.getElementById('current-' + activePlayer).textContent = roundScore;
+        } else {
+            alert('You have rolled 1! Next player\'s turn!');
+            // Passing turn the next player
+            nextPlayer();
+        }
     } else {
-        alert('You have rolled 1! Next player\'s turn!');
-        // Passing turn the next player
-        nextPlayer();
+        alert('Please press the \'NEW GAME\' button.');
     }
 });
 
 // Hold button Event Listener
 document.querySelector('.btn-hold').addEventListener('click', function () {
-    // Adding player's currentScore to the scores array and displaying it
-    scores[activePlayer] += roundScore;
-    document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
-    // Checking if the player has won the game
-    if (scores[activePlayer] >= 100) {
+    if (gameIsActive) {
+        // Adding player's currentScore to the scores array and displaying it
+        scores[activePlayer] += roundScore;
+        document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
-        document.getElementById('name-' + activePlayer).textContent = 'Winner!';
+        // Checking if the player has won the game
+        if (scores[activePlayer] >= 100) {
 
-        // hiding the dice image
-        document.querySelector('.dice').style.display = 'none';
+            document.getElementById('name-' + activePlayer).textContent = 'Winner!';
 
-        // Adding the winner CSS class to the player panel
-        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+            // hiding the dice image
+            document.querySelector('.dice').style.display = 'none';
 
-        // Removing the active CSS class from the player panel
-        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+            // Adding the winner CSS class to the player panel
+            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
 
-        alert('Player ' + (activePlayer + 1) + ' has won the game!');
+            // Removing the active CSS class from the player panel
+            document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+
+            alert('Player ' + (activePlayer + 1) + ' has won the game!');
+
+            gameIsActive = false;
+
+        } else {
+            // Passing turn the next player
+            nextPlayer();
+        }
     } else {
-        // Passing turn the next player
-        nextPlayer();
+        alert('Please press the \'NEW GAME\' button.');
     }
-
 });
 
 function nextPlayer() {
@@ -85,6 +96,8 @@ function nextPlayer() {
 document.querySelector('.btn-new').addEventListener('click', gameInit);
 
 function gameInit() {
+
+    gameIsActive = true;
 
     // Removing the winner CSS class
     document.querySelector('.player-0-panel').classList.remove('winner');
