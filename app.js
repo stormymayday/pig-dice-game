@@ -10,19 +10,33 @@ GAME RULES:
 */
 
 // Game Variables
-var scores, roundScore, activePlayer, dice;
+var scores, roundScore, activePlayer;
 
 scores = [0, 0];
 roundScore = 0;
 activePlayer = 0;
-dice = Math.floor(Math.random() * 6 + 1);
 
-// document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>';
-document.querySelector('#current-' + activePlayer).textContent = dice;
-
-var x = document.querySelector('#score-' + activePlayer).textContent;
-console.log(x);
-var y = document.querySelector('#score-1').innerHTML;
-console.log(y);
-
+// Hiding the dice image
 document.querySelector('.dice').style.display = 'none';
+
+// Setting scores to zero
+document.getElementById('score-0').textContent = 0;
+document.getElementById('score-1').textContent = 0;
+document.getElementById('current-0').textContent = 0;
+document.getElementById('current-1').textContent = 0;
+
+document.querySelector('.btn-roll').addEventListener('click', function () {
+
+    // Generating a random number between 1 and 6
+    var dice = Math.floor(Math.random() * 6 + 1);
+
+    // Displaying the corresponding dice image
+    var diceDOM = document.querySelector('.dice');
+    diceDOM.style.display = 'block';
+    diceDOM.src = 'dice-' + dice + '.png';
+
+    document.getElementById('current-' + activePlayer).textContent = dice;
+
+    // 
+
+});
