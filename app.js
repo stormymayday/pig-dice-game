@@ -1,16 +1,19 @@
 /*
 GAME RULES:
 
-- The game has 2 players, playing in rounds
-- In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score
-- BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
-- The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
+- The game has 2 players, playing in rounds.
+- In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score.
+- If the player rolls a 1, all their ROUND score is lost. After that, it's the next player's turn.
+
+- Furthermore, if the player rolls two sixes, they loose their Entire score and it's the next player's turn.
+
+- The player can choose to 'Hold', which means that their ROUND score gets added to their GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
 
 // Game Variables
-var scores, roundScore, activePlayer, gameIsActive;
+var scores, roundScore, activePlayer, gameIsActive, finalScore;
 
 // Initializing new game
 gameInit();
@@ -19,6 +22,8 @@ gameInit();
 document.querySelector('.btn-roll').addEventListener('click', function () {
 
     if (gameIsActive) {
+        setWinScore();
+
         // Generating a random number between 1 and 6
         var dice = Math.floor(Math.random() * 6 + 1);
 
@@ -36,6 +41,7 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
             // Passing turn the next player
             nextPlayer();
         }
+
     } else {
         alert('Please press the \'NEW GAME\' button.');
     }
@@ -45,12 +51,13 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
 document.querySelector('.btn-hold').addEventListener('click', function () {
 
     if (gameIsActive) {
+        setWinScore();
         // Adding player's currentScore to the scores array and displaying it
         scores[activePlayer] += roundScore;
         document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
         // Checking if the player has won the game
-        if (scores[activePlayer] >= 100) {
+        if (scores[activePlayer] >= finalScore) {
 
             document.getElementById('name-' + activePlayer).textContent = 'Winner!';
 
@@ -111,7 +118,7 @@ function gameInit() {
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
 
     // Hiding the dice image
-    document.querySelector('.dice').style.display = 'none';
+    // document.querySelector('.dice').style.display = 'none';
 
     // Resetting the scores
     document.getElementById('score-0').textContent = 0;
@@ -122,4 +129,15 @@ function gameInit() {
     // Reseting player names
     document.getElementById('name-0').textContent = 'player 1';
     document.getElementById('name-1').textContent = 'player 2';
+}
+
+function setWinScore() {
+
+    var input = document.querySelector('.final-score').value;
+
+    if (input) {
+        finalScore = input;
+    } else {
+        finalScore = 100;
+    }
 }
