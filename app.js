@@ -4,9 +4,6 @@ GAME RULES:
 - The game has 2 players, playing in rounds.
 - In each turn, a player rolls a dice as many times as he whishes. Each result get added to his ROUND score.
 - If the player rolls a 1, all their ROUND score is lost. After that, it's the next player's turn.
-
-- Furthermore, if the player rolls two sixes, they loose their Entire score and it's the next player's turn.
-
 - The player can choose to 'Hold', which means that their ROUND score gets added to their GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 
@@ -24,17 +21,21 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
     if (gameIsActive) {
         setWinScore();
 
-        // Generating a random number between 1 and 6
-        var dice = Math.floor(Math.random() * 6 + 1);
+        // Generating two random numbers between 1 and 6
+        var dice1 = Math.floor(Math.random() * 6 + 1);
+        var dice2 = Math.floor(Math.random() * 6 + 1);
 
-        // Displaying the corresponding dice image
-        var diceDOM = document.querySelector('.dice');
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+        // Displaying the corresponding dice images
+        var diceDOM1 = document.getElementById('dice-1');
+        var diceDOM2 = document.getElementById('dice-2');
+        diceDOM1.style.display = 'block';
+        diceDOM2.style.display = 'block';
+        diceDOM1.src = 'dice-' + dice1 + '.png';
+        diceDOM2.src = 'dice-' + dice2 + '.png';
 
-        if (dice > 1) {
+        if (dice1 !== 1 && dice2 !== 1) {
             // Updating the roundScore if dice roll is greater than 1
-            roundScore += dice;
+            roundScore += (dice1 + dice2);
             document.getElementById('current-' + activePlayer).textContent = roundScore;
         } else {
             alert('You have rolled 1! Next player\'s turn!');
@@ -61,8 +62,8 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
 
             document.getElementById('name-' + activePlayer).textContent = 'Winner!';
 
-            // hiding the dice image
-            document.querySelector('.dice').style.display = 'none';
+            // hiding the dice images
+            hideDice();
 
             // Adding the winner CSS class to the player panel
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
@@ -95,8 +96,8 @@ function nextPlayer() {
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
 
-    // hiding the dice image
-    document.querySelector('.dice').style.display = 'none';
+    // hiding the dice images
+    hideDice();
 }
 
 // New Game button Event Listener
@@ -118,7 +119,7 @@ function gameInit() {
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
 
     // Hiding the dice image
-    // document.querySelector('.dice').style.display = 'none';
+    hideDice();
 
     // Resetting the scores
     document.getElementById('score-0').textContent = 0;
@@ -140,4 +141,10 @@ function setWinScore() {
     } else {
         finalScore = 100;
     }
+}
+
+function hideDice() {
+    // hiding the dice images
+    document.getElementById('dice-1').style.display = 'none';
+    document.getElementById('dice-2').style.display = 'none';
 }
